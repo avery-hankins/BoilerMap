@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+/* Dark theme (default) */
+:root,
+[data-theme="dark"] {
+  /* Background colors (black and dark grays) */
+  --bg: #000000;
+  --bg-dark: #000000;
+  --bg-main: #18181b; /* zinc-900 */
+  --bg-light: #27272a; /* zinc-800 */
+  --bg-lighter: #3f3f46; /* zinc-700 */
+
+  /* Surface colors (for cards, panels, etc.) */
+  --surface: #27272a; /* zinc-800 */
+  --surface-dark: #18181b; /* zinc-900 */
+  --surface-light: #3f3f46; /* zinc-700 */
+  --surface-lighter: #52525b; /* zinc-600 */
+
+  /* Text colors */
+  --text-1: #ffffff;
+  --text-2: #e4e4e7; /* zinc-200 */
+  --text-3: #d4d4d8; /* zinc-300 */
+  --text-muted: #a1a1aa; /* zinc-400 */
+  --text-disabled: #71717a; /* zinc-500 */
+
+  /* Border colors */
+  --border: #3f3f46; /* zinc-700 */
+  --border-dark: #27272a; /* zinc-800 */
+  --border-light: #52525b; /* zinc-600 */
+  --border-focus: #f97316; /* primary-500 */
+}
+
+/* Light theme */
+[data-theme="light"] {
+  /* Background colors (white and light grays) */
+  --bg: #ffffff;
+  --bg-dark: #fafafa; /* zinc-50 */
+  --bg-main: #f4f4f5; /* zinc-100 */
+  --bg-light: #e4e4e7; /* zinc-200 */
+  --bg-lighter: #d4d4d8; /* zinc-300 */
+
+  /* Surface colors (for cards, panels, etc.) */
+  --surface: #ffffff;
+  --surface-dark: #fafafa; /* zinc-50 */
+  --surface-light: #f4f4f5; /* zinc-100 */
+  --surface-lighter: #e4e4e7; /* zinc-200 */
+
+  /* Text colors */
+  --text-1: #18181b; /* zinc-900 */
+  --text-2: #3f3f46; /* zinc-700 */
+  --text-3: #52525b; /* zinc-600 */
+  --text-muted: #71717a; /* zinc-500 */
+  --text-disabled: #a1a1aa; /* zinc-400 */
+
+  /* Border colors */
+  --border: #e4e4e7; /* zinc-200 */
+  --border-dark: #d4d4d8; /* zinc-300 */
+  --border-light: #f4f4f5; /* zinc-100 */
+  --border-focus: #f97316; /* primary-500 */
+}
+
+@theme {
+  /* Primary brand colors (orange/amber) - same for both themes */
+  --color-primary-50: #fff7ed;
+  --color-primary-100: #ffedd5;
+  --color-primary-200: #fed7aa;
+  --color-primary-300: #fdba74;
+  --color-primary-400: #fb923c;
+  --color-primary-500: #f97316; /* main orange */
+  --color-primary-600: #ea580c;
+  --color-primary-700: #c2410c;
+  --color-primary-800: #9a3412;
+  --color-primary-900: #7c2d12;
+
+  /* Background colors - reference CSS variables that change with theme */
+  --color-background: var(--bg);
+  --color-background-dark: var(--bg-dark);
+  --color-background-main: var(--bg-main);
+  --color-background-light: var(--bg-light);
+  --color-background-lighter: var(--bg-lighter);
+
+  /* Surface colors (for cards, panels, etc.) */
+  --color-surface: var(--surface);
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-light: var(--surface-light);
+  --color-surface-lighter: var(--surface-lighter);
+
+  /* Text colors */
+  --color-text-primary: var(--text-1);
+  --color-text-secondary: var(--text-2);
+  --color-text-tertiary: var(--text-3);
+  --color-text-muted: var(--text-muted);
+  --color-text-disabled: var(--text-disabled);
+
+  /* Border colors */
+  --color-border: var(--border);
+  --color-border-dark: var(--border-dark);
+  --color-border-light: var(--border-light);
+  --color-border-focus: var(--border-focus);
+
+  /* Accent colors (amber for highlights) - same for both themes */
+  --color-accent: #f59e0b; /* amber-500 */
+  --color-accent-light: #fbbf24; /* amber-400 */
+  --color-accent-lighter: #fcd34d; /* amber-300 */
+  --color-accent-dark: #d97706; /* amber-600 */
+  --color-accent-darker: #b45309; /* amber-700 */
+}
+
+@import "leaflet/dist/leaflet.css";
+
+/* View Transition API - Circular theme switch animation */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  animation: circle-expand 0.5s ease-in-out;
+}
+
+@keyframes circle-expand {
+  from {
+    clip-path: circle(0% at var(--logo-x, 0px) var(--logo-y, 0px));
+  }
+  to {
+    clip-path: circle(150% at var(--logo-x, 0px) var(--logo-y, 0px));
+  }
+}

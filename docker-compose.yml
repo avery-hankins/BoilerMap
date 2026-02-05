@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # LocalStack for local S3 storage
+  localstack:
+    image: localstack/localstack:latest
+    container_name: boilermap-localstack
+    ports:
+      - "4566:4566"           # LocalStack Gateway
+      - "4510-4559:4510-4559" # External services port range
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/var/lib/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
+    networks:
+      - boilermap-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # MySQL Database (optional - can use external MySQL)
+  mysql:
+    image: mysql:8.0
+    container_name: boilermap-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-boilermap_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-BoilerMapDB}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - boilermap-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  localstack_data:
+    driver: local
+  mysql_data:
+    driver: local
+
+networks:
+  boilermap-network:
+    driver: bridge

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Navigate to frontend directory and run formatter
+cd src/frontend
+npm run fmt
+
+# Stage any formatted files
+git add -u

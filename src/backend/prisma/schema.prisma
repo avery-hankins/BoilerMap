@@ -1,0 +1,357 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int     @id @default(autoincrement()) @map("User_ID")
+  firstName String  @map("FirstName")
+  lastName  String  @map("LastName")
+  username  String  @unique @map("Username")
+  email     String  @unique @map("Email")
+  password  String  @map("Password")
+  bio       String? @map("Bio")
+
+  posts       Post[]
+  memberships ClubMembership[]
+  adminClubs  ClubAdmin[]
+  bookings    Booking[]
+  tags        UserTag[]
+  rsvps       RSVP[]
+  likesPosts  LikesPosts[]
+  likesEvents LikesEvents[]
+
+  passwordResetTokens PasswordResetToken[]
+
+  follows            Follow[]
+  fullWebsiteAdmin   FullWebsiteAdmin?
+  clubRegistrations  ClubRegistration[]
+  userTasks          UserTask[]
+  clubRequestsSent   ClubRequests[] @relation("UserClubRequests")
+
+  @@map("Users")
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model UserTag {
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("User_ID")
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId  Int  @map("Tag_ID")
+
+  @@id([userId, tagId])
+  @@map("User_Tags")
+}
+
+model PendingUserVerification {
+  id        Int      @id @default(autoincrement()) @map("ID")
+  email     String   @unique
+  firstName String   @map("FirstName")
+  lastName  String   @map("LastName")
+  username  String   @map("Username")
+  password  String   @map("Password")
+  code      String   @map("Code")
+  expiresAt DateTime @map("ExpiresAt")
+  createdAt DateTime @default(now()) @map("Created_At")
+}
+
+model Club {
+  id          Int     @id @default(autoincrement()) @map("Club_ID")
+  name        String  @map("Name")
+  description String? @map("Description")
+  authId      String  @unique @map("Auth_ID")
+
+  email        String? @map("Email")
+  officerEmail String? @map("Officer_Email")
+  instagram    String? @map("Instagram")
+
+  admins      ClubAdmin[]
+  memberships ClubMembership[]
+  bookings    Booking[]
+  events      Event[]
+  posts       Post[]
+  follows     Follow[]
+  clubRequestsReceived ClubRequests[] @relation("ClubClubRequests")
+
+  @@map("Clubs")
+}
+
+model ClubAdmin {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int    @map("User_ID")
+  club   Club   @relation(fields: [authId], references: [authId], onDelete: Cascade)
+  authId String @map("Auth_ID")
+
+  @@id([userId, authId])
+  @@map("Club_Admins")
+}
+
+model ClubMembership {
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   Int      @map("User_ID")
+  club     Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId   Int      @map("Club_ID")
+  joinedAt DateTime @default(now()) @map("Joined_At")
+  role     String?  @map("Role")
+  emailUnsubscribed Boolean @default(false) @map("Email_Unsubscribed")
+
+  @@id([userId, clubId])
+  @@map("Club_Memberships")
+}
+
+model Post {
+  id          Int       @id @default(autoincrement()) @map("Post_ID")
+  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int?      @map("User_ID")
+  club        Club?     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId      Int?      @map("Club_ID")
+  title       String    @map("Title")
+  description String?   @map("Description")
+  imagePath   String?   @map("Image_Path")
+  createdAt   DateTime  @default(now()) @map("Created_At")
+  tags        PostTag[]
+
+  likes LikesPosts[]
+
+  @@map("Posts")
+}
+
+model Tag {
+  id    Int       @id @default(autoincrement()) @map("Tag_ID")
+  name  String    @unique @map("Name")
+  posts PostTag[]
+  users UserTag[]
+  events EventTags[]
+
+  @@map("Tags")
+}
+
+model ClubRequests {
+  id     Int  @id @default(autoincrement()) @map("ClubReq_ID")
+  user   User @relation("UserClubRequests", fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("User_ID")
+  club   Club @relation("ClubClubRequests", fields: [clubId], references: [id], onDelete: Cascade)
+  clubId Int  @map("Club_ID")
+
+  @@map("Club_Requests")
+  @@unique([userId, clubId])
+}
+
+model PostTag {
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int  @map("Post_ID")
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId  Int  @map("Tag_ID")
+
+  @@id([postId, tagId])
+  @@map("Post_Tags")
+}
+
+model Room {
+  id           Int    @id @default(autoincrement()) @map("Room_ID")
+  buildingCode String @map("Building_Code")
+  roomNum      String @map("Room_Num")
+  roomCapacity Int    @map("RoomCapacity")
+
+  amenities        RoomAmenity[]
+  bookings         Booking[]     @relation("PrimaryRoom")
+  events           Event[]
+  fallbackBookings Booking[]     @relation("FallbackRoom")
+
+  @@unique([buildingCode, roomNum])
+  @@map("Rooms")
+}
+
+model Amenity {
+  id    Int           @id @default(autoincrement()) @map("Amenity_ID")
+  name  String        @unique @map("Name")
+  rooms RoomAmenity[]
+
+  @@map("Amenities")
+}
+
+model RoomAmenity {
+  room      Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId    Int     @map("Room_ID")
+  amenity   Amenity @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+  amenityId Int     @map("Amenity_ID")
+
+  @@id([roomId, amenityId])
+  @@map("Room_Amenities")
+}
+
+enum BookingApproval {
+  PRIMARY_APPROVED
+  FALLBACK_APPROVED
+  DENIED
+  PENDING
+}
+
+enum ClubRegistrationStatus {
+  APPROVED
+  NOTAPPROVED
+  PENDING
+}
+
+model Booking {
+  id             Int   @id @default(autoincrement()) @map("Booking_ID")
+  room           Room  @relation("PrimaryRoom", fields: [roomId], references: [id], onDelete: Cascade)
+  roomId         Int   @map("Room_ID")
+  fallbackRoom   Room? @relation("FallbackRoom", fields: [fallbackRoomId], references: [id], onDelete: Cascade)
+  fallbackRoomId Int?  @map("Fallback_Room_ID")
+
+  club   Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId Int  @map("Club_ID")
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("User_ID")
+
+  startTime          DateTime @map("Start_Time")
+  endTime            DateTime @map("End_Time")
+  expectedAttendance Int?     @map("Expected_Attendance")
+  description        String?  @map("Description")
+
+  approvalStatus BookingApproval @default(PENDING) @map("Approval_Status")
+
+  event Event[]
+
+  @@map("Bookings")
+}
+
+model Event {
+  id          Int      @id @default(autoincrement()) @map("Event_ID")
+  room        Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId      Int      @map("Room_ID")
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId   Int      @map("Booking_ID")
+  club        Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId      Int      @map("Club_ID")
+  startTime   DateTime @map("Start_Time")
+  endTime     DateTime @map("End_Time")
+  description String?  @map("Description")
+  numRSVPs    Int      @default(0) @map("Num_RSVPs")
+  isRecurring Boolean  @map("IsRecurring") @default(false)
+  views       Int      @default(0) @map("Views")
+  imagePath   String?  @map("Image_Path")
+
+  rsvps RSVP[]
+  likes LikesEvents[]
+  tags  EventTags[]
+
+  @@map("Events")
+}
+
+model EventTags {
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId Int   @map("Event_ID")
+  tag     Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId   Int   @map("Tag_ID")
+
+  @@id([eventId, tagId])
+  @@map("EventTags")
+}
+
+model RSVP {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int      @map("User_ID")
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId   Int      @map("Event_ID")
+  status    String   @map("Status")
+  createdAt DateTime @default(now()) @map("Created_At")
+
+  @@unique([userId, eventId])
+  @@map("RSVPs")
+}
+
+model LikesPosts {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("User_ID")
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int  @map("Post_ID")
+
+  @@unique([userId, postId])
+  @@map("LikesPosts")
+}
+
+model LikesEvents {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int   @map("User_ID")
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId Int   @map("Event_ID")
+
+  @@unique([userId, eventId])
+  @@map("LikesEvents")
+}
+
+model Follow {
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("User_ID")
+  club   Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId Int  @map("Club_ID")
+
+  @@id([userId, clubId])
+  @@map("Follows")
+}
+
+model FullWebsiteAdmin {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @unique @map("User_ID")
+
+  @@map("Full_Website_Admins")
+}
+
+model ClubRegistration {
+  id        Int                      @id @default(autoincrement()) @map("Registration_ID")
+  user      User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int                      @map("User_ID")
+  clubName  String                   @map("Club_Name")
+  clubDescription String?            @map("Club_Description")
+  status    ClubRegistrationStatus   @default(PENDING) @map("Status")
+  createdAt DateTime                 @default(now()) @map("Created_At")
+
+  @@map("Club_Registrations")
+}
+
+model Task {
+  id          Int      @id @default(autoincrement()) @map("Task_ID")
+  title       String   @map("Title")
+  description String?  @map("Description")
+  dueDate     DateTime? @map("Due_Date")
+  createdAt   DateTime @default(now()) @map("Created_At")
+
+  userTasks UserTask[]
+
+  @@map("Tasks")
+}
+
+model UserTask {
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("User_ID")
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId Int  @map("Task_ID")
+
+  @@id([userId, taskId])
+  @@map("User_Tasks")
+}
