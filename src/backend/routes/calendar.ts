@@ -223,7 +223,7 @@ router.get('/download', verifyCalendarAccess, async (req: Request, res: Response
  */
 router.propfind('/caldav/:userId', verifyCalendarAccess, async (req: Request, res: Response) => {
   try {
-    const requestedUserId = parseInt(req.params.userId);
+    const requestedUserId = parseInt(req.params.userId as string);
     const authenticatedUserId = req.userId!;
 
     // Ensure user can only access their own calendar
@@ -301,9 +301,9 @@ router.options('/caldav/:userId', (req: Request, res: Response) => {
  */
 router.get('/caldav/:userId/events/:eventId.ics', verifyCalendarAccess, async (req: Request, res: Response) => {
   try {
-    const requestedUserId = parseInt(req.params.userId);
+    const requestedUserId = parseInt(req.params.userId as string);
     const authenticatedUserId = req.userId!;
-    const eventId = parseInt(req.params.eventId);
+    const eventId = parseInt(req.params.eventId as string);
 
     // Ensure user can only access their own calendar
     if (requestedUserId !== authenticatedUserId) {

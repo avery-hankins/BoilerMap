@@ -110,7 +110,7 @@ router.get(
   "/getauthbyclub/:clubId",
   authenticateToken,
   async (req: Request, res: Response) => {
-    const { clubId } = req.params;
+    const clubId = req.params.clubId as string;
     const userId = req.userId;
 
     if (userId === undefined) {
@@ -122,7 +122,7 @@ router.get(
         where: {
           userId_clubId: {
             userId: userId,
-            clubId: parseInt(clubId),
+            clubId: parseInt(clubId as string),
           },
         },
         include: { club: true },
@@ -158,7 +158,7 @@ router.get(
   authenticateToken,
   async (req: Request, res: Response) => {
     try {
-      const clubId = parseInt(req.params.clubId);
+      const clubId = parseInt(req.params.clubId as string);
       const userId = req.userId;
 
       if (userId === undefined) {
@@ -204,7 +204,7 @@ router.get(
 // Get follower count for a club
 router.get("/:clubId/followers", async (req: Request, res: Response) => {
   try {
-    const clubId = parseInt(req.params.clubId);
+    const clubId = parseInt(req.params.clubId as string);
 
     if (!clubId || isNaN(clubId)) {
       return res.status(400).json({ error: "Invalid club ID" });
@@ -302,7 +302,7 @@ router.get("/:clubId/followers", async (req: Request, res: Response) => {
 // Update a club profile
 router.put("/:id", async (req: Request, res: Response) => {
   try {
-    const clubId = parseInt(req.params.id);
+    const clubId = parseInt(req.params.id as string);
     const { name, description, email, officerEmail, instagram } = req.body;
 
     const club = await prisma.club.update({
@@ -331,7 +331,7 @@ router.post(
   authenticateToken,
   async (req: Request, res: Response) => {
     try {
-      const clubId = parseInt(req.params.clubId);
+      const clubId = parseInt(req.params.clubId as string);
       const userId = req.userId;
 
       if (userId === undefined) {
@@ -399,7 +399,7 @@ router.delete(
   authenticateToken,
   async (req: Request, res: Response) => {
     try {
-      const clubId = parseInt(req.params.clubId);
+      const clubId = parseInt(req.params.clubId as string);
       const userId = req.userId;
 
       if (userId === undefined) {
@@ -466,7 +466,7 @@ router.get(
   authenticateToken,
   async (req: Request, res: Response) => {
     try {
-      const clubId = parseInt(req.params.id);
+      const clubId = parseInt(req.params.id as string);
       const userId = req.userId;
       if (userId === undefined) {
         return res.status(401).json({ error: "User not authenticated" });
@@ -533,8 +533,8 @@ router.put(
   "/:clubId/members/:userId/role",
   async (req: Request, res: Response) => {
     try {
-      const clubId = parseInt(req.params.clubId);
-      const userId = parseInt(req.params.userId);
+      const clubId = parseInt(req.params.clubId as string);
+      const userId = parseInt(req.params.userId as string);
       const { role, managerId } = req.body;
 
       const club = await prisma.club.findUnique({
@@ -613,8 +613,8 @@ router.delete(
   "/:clubId/members/:userId",
   async (req: Request, res: Response) => {
     try {
-      const clubId = parseInt(req.params.clubId);
-      const userId = parseInt(req.params.userId);
+      const clubId = parseInt(req.params.clubId as string);
+      const userId = parseInt(req.params.userId as string);
       const { managerId } = req.body;
 
       const club = await prisma.club.findUnique({
@@ -703,8 +703,8 @@ router.delete(
   "/:clubId/members/:userId/role",
   async (req: Request, res: Response) => {
     try {
-      const clubId = parseInt(req.params.clubId);
-      const userId = parseInt(req.params.userId);
+      const clubId = parseInt(req.params.clubId as string);
+      const userId = parseInt(req.params.userId as string);
       const { managerId } = req.body;
 
       const club = await prisma.club.findUnique({
@@ -777,7 +777,7 @@ router.delete(
 // Get all events for a specific club
 router.get("/:clubId/events", async (req: Request, res: Response) => {
   try {
-    const clubId = parseInt(req.params.clubId);
+    const clubId = parseInt(req.params.clubId as string);
 
     if (isNaN(clubId)) {
       return res.status(400).json({ error: "Invalid club ID" });
@@ -829,7 +829,7 @@ router.get(
   authenticateToken,
   async (req, res) => {
     try {
-      const clubId = parseInt(req.params.clubId);
+      const clubId = parseInt(req.params.clubId as string);
       const userId = req.userId;
 
       if (!clubId || isNaN(clubId)) {
@@ -998,7 +998,7 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const userId = req.userId;
-      const clubId = parseInt(req.params.clubid);
+      const clubId = parseInt(req.params.clubid as string);
       const { requestId } = req.body;
 
       if (userId === undefined) {
@@ -1120,7 +1120,7 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const userId = req.userId;
-      const clubId = parseInt(req.params.clubid);
+      const clubId = parseInt(req.params.clubid as string);
       const { requestId } = req.body;
 
       if (userId === undefined) {
@@ -1208,7 +1208,7 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const userId = req.userId;
-      const clubId = parseInt(req.params.clubid);
+      const clubId = parseInt(req.params.clubid as string);
 
       if (userId === undefined) {
         return res.status(401).json({ error: "User not authenticated" });
@@ -1301,7 +1301,7 @@ router.post(
 // Get follower count for a club
 router.get("/api/clubs/:clubId/followers", async (req, res) => {
   try {
-    const clubId = parseInt(req.params.clubId);
+    const clubId = parseInt(req.params.clubId as string);
 
     if (!clubId || isNaN(clubId)) {
       return res.status(400).json({ error: "Invalid club ID" });
@@ -1327,7 +1327,7 @@ router.post(
   authenticateToken,
   async (req, res) => {
     try {
-      const clubId = parseInt(req.params.clubId);
+      const clubId = parseInt(req.params.clubId as string);
       const userId = req.userId;
 
       if (!clubId || isNaN(clubId)) {
@@ -1405,7 +1405,7 @@ router.delete(
   authenticateToken,
   async (req, res) => {
     try {
-      const clubId = parseInt(req.params.clubId);
+      const clubId = parseInt(req.params.clubId as string);
       const userId = req.userId;
 
       if (!clubId || isNaN(clubId)) {
@@ -1499,7 +1499,7 @@ router.get("/", async (req: Request, res: Response) => {
 // Get a single club profile (with members and events)
 router.get("/:id", async (req: Request, res: Response) => {
   try {
-    const clubId = parseInt(req.params.id);
+    const clubId = parseInt(req.params.id as string);
 
     const club = await prisma.club.findUnique({
       where: { id: clubId },
@@ -1594,7 +1594,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 // Update a club profile
 router.put("/:id", async (req: Request, res: Response) => {
   try {
-    const clubId = parseInt(req.params.id);
+    const clubId = parseInt(req.params.id as string);
     const { name, description, email, officerEmail, instagram } = req.body;
 
     const club = await prisma.club.update({

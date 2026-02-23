@@ -53,7 +53,7 @@ router.post("/", authenticateToken, async (req: Request, res: Response) => {
  */
 router.post("/:taskId/assign", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const { taskId } = req.params;
+    const taskId = req.params.taskId as string;
     const { userId } = req.body;
 
     if (!userId) return res.status(400).json({ error: "userId is required" });
@@ -107,7 +107,7 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
  */
 router.get("/user/:userId", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const userId = req.params.userId as string;
 
     const tasks = await prisma.userTask.findMany({
       where: { userId: Number(userId) },
@@ -136,7 +136,8 @@ router.get("/user/:userId", authenticateToken, async (req: Request, res: Respons
  */
 router.delete("/:taskId/user/:userId", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const { taskId, userId } = req.params;
+    const taskId = req.params.taskId as string;
+    const userId = req.params.userId as string;
 
     await prisma.userTask.delete({
       where: {
@@ -162,7 +163,7 @@ router.delete("/:taskId/user/:userId", authenticateToken, async (req: Request, r
  */
 router.delete("/:taskId", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const { taskId } = req.params;
+    const taskId = req.params.taskId as string;
 
     // Delete userTask relations first (due to FK constraints)
     await prisma.userTask.deleteMany({

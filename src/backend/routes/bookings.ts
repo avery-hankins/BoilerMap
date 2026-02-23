@@ -141,7 +141,7 @@ router.post("/room-booking-requests", async (req: Request, res: Response) => {
 // Approve room booking request
 router.put("/room-booking-requests/:id/approve", async (req: Request, res: Response) => {
   try {
-    const requestId = parseInt(req.params.id);
+    const requestId = parseInt(req.params.id as string);
 
     const request = await prisma.booking.update({
       where: { id: requestId },
@@ -179,7 +179,7 @@ router.put("/room-booking-requests/:id/approve", async (req: Request, res: Respo
 // Deny room booking request
 router.put("/room-booking-requests/:id/deny", async (req: Request, res: Response) => {
   try {
-    const requestId = parseInt(req.params.id);
+    const requestId = parseInt(req.params.id as string);
 
     const request = await prisma.booking.update({
       where: { id: requestId },

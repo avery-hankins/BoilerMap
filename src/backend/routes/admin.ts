@@ -91,7 +91,7 @@ router.get("/", async (req: Request, res: Response) => {
 // Promote user to admin (only full website admins can do this)
 router.put("/users/:id/promote", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id as string);
     const currentUserId = req.userId;
 
     if (!currentUserId) {
@@ -143,7 +143,7 @@ router.put("/users/:id/promote", authenticateToken, async (req: Request, res: Re
 // Demote user from admin (only full website admins can do this)
 router.put("/users/:id/demote", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id as string);
     const currentUserId = req.userId;
 
     if (!currentUserId) {
@@ -200,7 +200,7 @@ router.put("/users/:id/demote", authenticateToken, async (req: Request, res: Res
 // Delete user (only full website admins can do this)
 router.delete("/users/:id", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id as string);
     const currentUserId = req.userId;
 
     if (!currentUserId) {

@@ -66,7 +66,7 @@ router.get("/", authenticateToken, requireAdmin, async (req: Request, res: Respo
 // Get a specific club registration request
 router.get("/:id", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const requestId = parseInt(req.params.id);
+    const requestId = parseInt(req.params.id as string);
 
     const request = await prisma.clubRegistration.findUnique({
       where: { id: requestId },
@@ -165,7 +165,7 @@ router.post("/", authenticateToken, async (req: Request, res: Response) => {
 // Approve club registration request (admin only)
 router.put("/:id/approve", authenticateToken, requireAdmin, async (req: Request, res: Response) => {
   try {
-    const requestId = parseInt(req.params.id);
+    const requestId = parseInt(req.params.id as string);
 
     // Check if request exists and is pending
     const existingRequest = await prisma.clubRegistration.findUnique({
@@ -224,7 +224,7 @@ router.put("/:id/approve", authenticateToken, requireAdmin, async (req: Request,
 // Deny club registration request (admin only)
 router.put("/:id/deny", authenticateToken, requireAdmin, async (req: Request, res: Response) => {
   try {
-    const requestId = parseInt(req.params.id);
+    const requestId = parseInt(req.params.id as string);
 
     // Check if request exists and is pending
     const existingRequest = await prisma.clubRegistration.findUnique({
