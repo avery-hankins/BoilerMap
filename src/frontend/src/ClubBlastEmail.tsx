@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { Mail, Users, Send, AlertCircle } from "lucide-react";
 
@@ -62,7 +63,7 @@ export default function ClubBlastEmailUI({
         }
 
         // Fetch user's club admin roles
-        const url = `http://localhost:3000/api/users/${userId}/roles`;
+        const url = `${API_URL}/api/users/${userId}/roles`;
         console.log("Fetching clubs from:", url);
 
         const response = await fetch(url, {
@@ -144,7 +145,7 @@ export default function ClubBlastEmailUI({
 
     setIsSending(true);
     const token = localStorage.getItem("token");
-    fetch("http://localhost:3000/api/email-blast-club", {
+    fetch(`${API_URL}/api/email-blast-club`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

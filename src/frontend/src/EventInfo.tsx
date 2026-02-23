@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import {
   Calendar,
@@ -109,7 +110,7 @@ export default function EventDetailsPage() {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/api/rsvp", {
+      const response = await fetch(`${API_URL}/api/rsvp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

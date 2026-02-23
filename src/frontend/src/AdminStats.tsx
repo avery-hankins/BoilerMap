@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 
 interface Booking {
@@ -41,7 +42,7 @@ export default function AdminStats() {
 
   const fetchUsers = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:3000/api/stats/users", {
+    const res = await fetch(`${API_URL}/api/stats/users`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -50,7 +51,7 @@ export default function AdminStats() {
 
   const fetchClubs = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:3000/api/stats/clubs", {
+    const res = await fetch(`${API_URL}/api/stats/clubs`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -59,7 +60,7 @@ export default function AdminStats() {
 
   const fetchRooms = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:3000/api/stats/rooms", {
+    const res = await fetch(`${API_URL}/api/stats/rooms`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -70,12 +71,12 @@ export default function AdminStats() {
     setLoading(true);
     const token = localStorage.getItem("token");
     try {
-      let url = "http://localhost:3000/api/stats/bookings";
+      let url = `${API_URL}/api/stats/bookings`;
       if (tab === "user" && selectedUser) url += `?userId=${selectedUser}`;
       if (tab === "club" && selectedClub) url += `?clubId=${selectedClub}`;
       if (tab === "room" && selectedRoom)
-        url = `http://localhost:3000/api/stats/room/${selectedRoom}`;
-      if (tab === "flags") url = "http://localhost:3000/api/stats/flags";
+        url = `${API_URL}/api/stats/room/${selectedRoom}`;
+      if (tab === "flags") url = `${API_URL}/api/stats/flags`;
 
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },

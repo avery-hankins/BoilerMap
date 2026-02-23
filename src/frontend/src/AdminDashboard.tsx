@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import {
   Users,
@@ -64,7 +65,7 @@ export default function AdminDashboard({ setView }: AdminDashboardProps) {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/api/users/me", {
+      const response = await fetch(`${API_URL}/api/users/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -104,7 +105,7 @@ export default function AdminDashboard({ setView }: AdminDashboardProps) {
       setIsLoading(true);
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:3000/api/users/", {
+      const response = await fetch(`${API_URL}/api/users/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -149,7 +150,7 @@ export default function AdminDashboard({ setView }: AdminDashboardProps) {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/users/${userId}/promote`,
+        `${API_URL}/api/users/${userId}/promote`,
         {
           method: "PUT",
           headers: {
@@ -180,7 +181,7 @@ export default function AdminDashboard({ setView }: AdminDashboardProps) {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/users/${userId}/demote`,
+        `${API_URL}/api/users/${userId}/demote`,
         {
           method: "PUT",
           headers: {
@@ -215,7 +216,7 @@ export default function AdminDashboard({ setView }: AdminDashboardProps) {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/admin/users/${userId}`,
+        `${API_URL}/api/admin/users/${userId}`,
         {
           method: "DELETE",
           headers: {

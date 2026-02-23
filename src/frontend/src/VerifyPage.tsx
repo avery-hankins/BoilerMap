@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,7 +22,7 @@ export default function VerifyPage() {
     if (!code.trim()) return alert("Please enter your code.");
 
     try {
-      const res = await fetch("http://localhost:3000/api/verify", {
+      const res = await fetch(`${API_URL}/api/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code }),

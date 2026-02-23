@@ -174,7 +174,7 @@ async function sendRSVPReminders() {
         <p>- BoilerMap Team</p>
         <hr style="margin-top: 30px; border: none; border-top: 1px solid #ddd;">
         <p style="font-size: 12px; color: #666; margin-top: 15px;">
-          To unsubscribe from this event, <a href="http://localhost:5173/event/${event.id}" style="color: #0066cc;">undo your RSVP</a>.
+          To unsubscribe from this event, <a href="${process.env.FRONTEND_URL || "http://localhost:5173"}/event/${event.id}" style="color: #0066cc;">undo your RSVP</a>.
         </p>
       `;
 
@@ -195,7 +195,7 @@ We look forward to seeing you there!
 - BoilerMap Team
 
 ---
-To unsubscribe from this event, undo your RSVP at: http://localhost:5173/event/${event.id}
+To unsubscribe from this event, undo your RSVP at: ${process.env.FRONTEND_URL || "http://localhost:5173"}/event/${event.id}
       `;
 
       try {

@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import {
   AlertCircle,
@@ -67,7 +68,7 @@ export default function CreateEventPage() {
   const fetchTags = async () => {
     try {
       console.log("Fetching tags...");
-      const response = await fetch("http://localhost:3000/api/events/gettags");
+      const response = await fetch(`${API_URL}/api/events/gettags`);
       console.log("Tags response status:", response.status);
 
       if (!response.ok) throw new Error("Failed to fetch tags");
@@ -92,7 +93,7 @@ export default function CreateEventPage() {
       }
 
       // Get user data
-      const userRes = await fetch("http://localhost:3000/api/users/userdata", {
+      const userRes = await fetch(`${API_URL}/api/users/userdata`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -103,7 +104,7 @@ export default function CreateEventPage() {
       console.log("User data:", userData);
 
       // Get all clubs
-      const clubsRes = await fetch("http://localhost:3000/api/clubs");
+      const clubsRes = await fetch(`${API_URL}/api/clubs`);
       if (!clubsRes.ok) throw new Error("Failed to fetch clubs");
       const allClubs = await clubsRes.json();
 
@@ -116,7 +117,7 @@ export default function CreateEventPage() {
           console.log(`Checking auth for club ${club.id} (${club.name})...`);
 
           const authRes = await fetch(
-            `http://localhost:3000/api/clubs/getauthbyclub/${club.id}`,
+            `${API_URL}/api/clubs/getauthbyclub/${club.id}`,
             { headers: { Authorization: `Bearer ${token}` } },
           );
 
@@ -160,7 +161,7 @@ export default function CreateEventPage() {
 
       // Fetch all bookings
       const bookingsRes = await fetch(
-        "http://localhost:3000/api/room-booking-requests",
+        `${API_URL}/api/room-booking-requests`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -173,7 +174,7 @@ export default function CreateEventPage() {
 
       // Fetch all events to check which bookings already have events
       const eventsRes = await fetch(
-        "http://localhost:3000/api/events/eventlist",
+        `${API_URL}/api/events/eventlist`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -343,7 +344,7 @@ export default function CreateEventPage() {
       }
 
       const response = await fetch(
-        "http://localhost:3000/api/events/makeevent",
+        `${API_URL}/api/events/makeevent`,
         {
           method: "POST",
           headers: {
@@ -402,7 +403,7 @@ export default function CreateEventPage() {
           console.log("Email payload:", emailPayload);
 
           const emailResponse = await fetch(
-            "http://localhost:3000/api/email-event-creation", // Remove /emails
+            `${API_URL}/api/email-event-creation`, // Remove /emails
             {
               method: "POST",
               headers: {

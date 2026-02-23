@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
@@ -91,7 +92,7 @@ export default function RoomListing() {
         if (building_code) {
           try {
             const eventsResponse = await fetch(
-              `http://localhost:3000/api/events/eventlist`,
+              `${API_URL}/api/events/eventlist`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,

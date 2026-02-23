@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { Mail, Calendar, Send, AlertCircle } from "lucide-react";
 
@@ -55,7 +56,7 @@ export default function EventEmailUI({
           return;
         }
 
-        const url = `http://localhost:3000/api/events-for-user?email=${encodeURIComponent(userEmail)}`;
+        const url = `${API_URL}/api/events-for-user?email=${encodeURIComponent(userEmail)}`;
         console.log("Fetching events from:", url);
 
         const response = await fetch(url);
@@ -122,7 +123,7 @@ export default function EventEmailUI({
 
     setIsSending(true);
     const token = localStorage.getItem("token");
-    fetch("http://localhost:3000/api/email-event", {
+    fetch(`${API_URL}/api/email-event`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

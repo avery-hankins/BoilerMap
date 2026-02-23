@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Users, Search, TrendingUp, ArrowUpDown } from "lucide-react";
@@ -34,8 +35,8 @@ export default function ClubsList() {
       setIsLoading(true);
       const url =
         sortBy === "trending"
-          ? "http://localhost:3000/api/clubs?sortBy=trending"
-          : "http://localhost:3000/api/clubs";
+          ? `${API_URL}/api/clubs?sortBy=trending`
+          : `${API_URL}/api/clubs`;
 
       const response = await fetch(url);
 

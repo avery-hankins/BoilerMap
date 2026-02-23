@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { Mail, Users, User, Globe, Send, AlertCircle } from "lucide-react";
 
@@ -42,7 +43,7 @@ export default function AdminEmailUI({
   useEffect(() => {
     async function load() {
       try {
-        const response = await fetch("http://localhost:3000/api/clubs");
+        const response = await fetch(`${API_URL}/api/clubs`);
         const data = await response.json();
         setClubData(data);
       } catch (error) {
@@ -122,7 +123,7 @@ export default function AdminEmailUI({
         setIsSending(false);
         return;
       }
-      fetch("http://localhost:3000/api/email-club", {
+      fetch(`${API_URL}/api/email-club`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -157,7 +158,7 @@ export default function AdminEmailUI({
         });
       return;
     } else if (emailData.recipientType === "everyone") {
-      fetch("http://localhost:3000/api/email-everyone", {
+      fetch(`${API_URL}/api/email-everyone`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -194,7 +195,7 @@ export default function AdminEmailUI({
       };
 
       // use localhost:3000/api/email endpoint {email: string, subject: string, body: string}
-      fetch("http://localhost:3000/api/email", {
+      fetch(`${API_URL}/api/email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

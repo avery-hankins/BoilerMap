@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useEffect, useState } from "react";
 
 interface Event {
@@ -16,7 +17,7 @@ const Recommendations: React.FC = () => {
     const fetchEvents = async () => {
       try {
         const token = localStorage.getItem("token"); // your JWT
-        const res = await fetch("http://localhost:3000/api/recommendations/", {
+        const res = await fetch(`${API_URL}/api/recommendations/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const text = await res.text();

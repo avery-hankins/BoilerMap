@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useRef, useEffect } from "react";
 import { MapPin, Layers, Home, Users, Search, Calendar } from "lucide-react";
 import EventMap from "./EventMap";
@@ -103,7 +104,7 @@ export default function BoilermapUI() {
         }
 
         const response = await fetch(
-          "http://localhost:3000/api/users/profile-photo",
+          `${API_URL}/api/users/profile-photo`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -134,7 +135,7 @@ export default function BoilermapUI() {
 
   // Fetch user data
   useEffect(() => {
-    fetch("http://localhost:3000/api/users")
+    fetch(`${API_URL}/api/users`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched user data:", data);
@@ -413,7 +414,7 @@ function Recommendations() {
     const fetchEvents = async () => {
       try {
         const token = localStorage.getItem("token"); // your JWT
-        const res = await fetch("http://localhost:3000/api/recommendations/", {
+        const res = await fetch(`${API_URL}/api/recommendations/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -507,7 +508,7 @@ function ClubManagement() {
     const fetchClubs = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("http://localhost:3000/api/clubs");
+        const response = await fetch(`${API_URL}/api/clubs`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch clubs");

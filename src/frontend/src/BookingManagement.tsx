@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import {
   Calendar,
@@ -33,7 +34,7 @@ export default function BookingManagement({
       setIsLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:3000/api/room-booking-requests",
+          `${API_URL}/api/room-booking-requests`,
         );
         const data = await response.json();
         console.log(data);
@@ -58,7 +59,7 @@ export default function BookingManagement({
     if (confirmed) {
       try {
         await fetch(
-          `http://localhost:3000/api/room-booking-requests/${id}/approve`,
+          `${API_URL}/api/room-booking-requests/${id}/approve`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -87,7 +88,7 @@ export default function BookingManagement({
     if (reason) {
       try {
         await fetch(
-          `http://localhost:3000/api/room-booking-requests/${id}/deny`,
+          `${API_URL}/api/room-booking-requests/${id}/deny`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
