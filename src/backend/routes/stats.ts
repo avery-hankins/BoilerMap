@@ -78,7 +78,7 @@ router.get("/bookings", authenticateToken, async (req, res) => {
 
 // Get bookings by room
 router.get("/room/:roomId", authenticateToken, async (req, res) => {
-    const { roomId } = req.params;
+    const roomId = req.params.roomId as string;
 
     try {
         const bookings = await prisma.booking.findMany({

@@ -306,7 +306,7 @@ router.put('/club-memberships', authenticateToken, async (req: Request, res: Res
 // Get single user by ID
 router.get("/:id", async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id as string);
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -334,7 +334,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 // Get user's roles across all clubs
 router.get("/:userId/roles", async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.userId);
+    const userId = parseInt(req.params.userId as string);
 
     // Get user info with bio
     const user = await prisma.user.findUnique({
@@ -404,7 +404,7 @@ router.get("/:userId/roles", async (req: Request, res: Response) => {
 // Update user bio
 router.put("/:id/bio", async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id as string);
     const { bio, requestingUserId } = req.body;
 
     // Check if user is updating their own bio
@@ -432,7 +432,7 @@ router.put("/:id/bio", async (req: Request, res: Response) => {
 
 router.put("/:id/promote", async (req: Request, res: Response) => {
     try {
-        const userIdToPromote = parseInt(req.params.id);
+        const userIdToPromote = parseInt(req.params.id as string);
 
         const user = await prisma.user.findUnique({
             where: { id: userIdToPromote },
@@ -465,7 +465,7 @@ router.put("/:id/promote", async (req: Request, res: Response) => {
 
 router.put("/:id/demote", async (req: Request, res: Response) => {
     try {
-        const userIdToDemote = parseInt(req.params.id);
+        const userIdToDemote = parseInt(req.params.id as string);
         const currentUserId = req.userId; // Already checked in middleware
 
         // Prevent self-demotion
@@ -504,7 +504,7 @@ router.put("/:id/demote", async (req: Request, res: Response) => {
 
 router.delete("/:id", async (req: Request, res: Response) => {
     try {
-        const userIdToDelete = parseInt(req.params.id);
+        const userIdToDelete = parseInt(req.params.id as string);
         const currentUserId = req.userId; // Already checked in middleware
 
         // Prevent self-deletion
@@ -537,7 +537,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
 
 router.get("/:id/following", async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id as string);
 
     // Verify user exists
     const user = await prisma.user.findUnique({

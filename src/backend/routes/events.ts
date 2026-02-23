@@ -378,7 +378,7 @@
   // Get image for an event
   router.get("/get-image-by-event/:eventId", async (req: Request, res: Response) => {
     try {
-      const { eventId } = req.params;
+      const eventId = req.params.eventId as string;
 
       // Validate eventId
       if (!eventId || isNaN(parseInt(eventId))) {
@@ -588,7 +588,7 @@
         return res.status(401).json({ error: 'User not authenticated' });
       }
 
-      const { eventId } = req.params;
+      const eventId = req.params.eventId as string;
 
       // Validate event ID
       if (!eventId) {
@@ -654,7 +654,7 @@
   // Get likes for an event
   router.get("/:eventId/likes", authenticateToken, async (req: Request, res: Response) => {
     try {
-      const { eventId } = req.params;
+      const eventId = req.params.eventId as string;
       const userId = req.userId;
       if (typeof userId !== "number") {
         return res.status(401).json({ error: "Unauthorized" });
@@ -687,7 +687,7 @@
   // Like an event
   router.post("/:eventId/like", authenticateToken, async (req: Request, res: Response) => {
     try {
-      const { eventId } = req.params;
+      const eventId = req.params.eventId as string;
       const userId = req.userId;
       if (typeof userId !== "number") {
         return res.status(401).json({ error: "Unauthorized" });
@@ -713,7 +713,7 @@
   // Unlike an event
   router.delete("/:eventId/like", authenticateToken, async (req: Request, res: Response) => {
     try {
-      const { eventId } = req.params;
+      const eventId = req.params.eventId as string;
       const userId = req.userId;
       if (typeof userId !== "number") {
         return res.status(401).json({ error: "Unauthorized" });
@@ -739,7 +739,7 @@
 
 router.get("/:eventId/views", async (req: Request, res: Response) => {
   try {
-    const { eventId } = req.params;
+    const eventId = req.params.eventId as string;
 
     const event = await prisma.event.findUnique({
       where: { id: Number(eventId) },
@@ -761,7 +761,7 @@ router.get("/:eventId/views", async (req: Request, res: Response) => {
 
 router.post("/:eventId/views", async (req: Request, res: Response) => {
   try {
-    const { eventId } = req.params;
+    const eventId = req.params.eventId as string;
 
     const updated = await prisma.event.update({
       where: { id: Number(eventId) },
@@ -1088,7 +1088,7 @@ router.get('/gettags', async (req: Request, res: Response) => {
   // Get a single event by ID
   router.get("/:id", async (req: Request, res: Response) => {
     try {
-      const eventId = parseInt(req.params.id);
+      const eventId = parseInt(req.params.id as string);
 
       if (isNaN(eventId)) {
         return res.status(400).json({ error: "Invalid event ID" });
@@ -1137,7 +1137,7 @@ router.get('/gettags', async (req: Request, res: Response) => {
   // Toggle RSVP for an event (alternative endpoint)
   router.post("/:id/rsvp", authenticateToken, async (req: Request, res: Response) => {
     try {
-      const eventId = parseInt(req.params.id);
+      const eventId = parseInt(req.params.id as string);
       const userId = req.userId;
 
       const { emailPreference } = req.body;
@@ -1225,7 +1225,7 @@ router.get('/gettags', async (req: Request, res: Response) => {
   // Check RSVP status for current user
   router.get("/:id/rsvp-status", authenticateToken, async (req: Request, res: Response) => {
     try {
-      const eventId = parseInt(req.params.id);
+      const eventId = parseInt(req.params.id as string);
       const userId = req.userId;
 
       if (!userId) {
@@ -1255,7 +1255,7 @@ router.get('/gettags', async (req: Request, res: Response) => {
   // Get list of all users who RSVPd to an event
   router.get("/:id/rsvps", async (req: Request, res: Response) => {
     try {
-      const eventId = parseInt(req.params.id);
+      const eventId = parseInt(req.params.id as string);
 
       if (isNaN(eventId)) {
         return res.status(400).json({ error: "Invalid event ID" });
@@ -1299,7 +1299,7 @@ router.get('/gettags', async (req: Request, res: Response) => {
 // Check if current user can edit/delete an event
 router.get("/:eventId/can-edit", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const { eventId } = req.params;
+    const eventId = req.params.eventId as string;
     const userId = req.userId;
     
     if (typeof userId !== "number") {
@@ -1362,7 +1362,7 @@ router.get("/:eventId/can-edit", authenticateToken, async (req: Request, res: Re
 // Delete an event (only for authorized users)
 router.delete("/:eventId", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const { eventId } = req.params;
+    const eventId = req.params.eventId as string;
     const userId = req.userId;
     
     if (typeof userId !== "number") {
@@ -1504,7 +1504,7 @@ router.delete("/:eventId", authenticateToken, async (req: Request, res: Response
 // PUT /api/events/:eventId - Update an event
 router.put('/:eventId', authenticateToken, upload.single('image'), async (req: Request & { file?: Express.Multer.File }, res: Response) => {
   try {
-    const { eventId } = req.params;
+    const eventId = req.params.eventId as string;
     const userId = req.userId;
     
     if (typeof userId !== "number") {
