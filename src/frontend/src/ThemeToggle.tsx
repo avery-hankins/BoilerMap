@@ -14,8 +14,8 @@ export function ThemeToggle() {
 
   const handleThemeChange = (newTheme: Theme) => {
     // Use View Transitions API for smooth circular animation
-    if (!document.startViewTransition) {
-      // Fallback for browsers that don't support View Transitions
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!document.startViewTransition || prefersReducedMotion) {
       setTheme(newTheme);
       return;
     }

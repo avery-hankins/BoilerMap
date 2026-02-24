@@ -132,3 +132,10 @@
     clip-path: circle(150% at var(--logo-x, 0px) var(--logo-y, 0px));
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
