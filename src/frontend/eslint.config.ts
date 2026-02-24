@@ -14,6 +14,6 @@ export default defineConfig([
   {
     ignores: ["dist/*"],
   },
-  tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
+  ...tseslint.configs.recommended,
+  pluginReact.configs.flat!.recommended as any,
 ]);

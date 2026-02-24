@@ -1,5 +1,5 @@
 import { API_URL } from "./config";
-import React, { useState, useEffect, FormEvent } from "react";
+import React, { useState, useEffect, type FormEvent } from "react";
 import {
   Search,
   Calendar,
@@ -14,7 +14,7 @@ import {
   Tag,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Event } from "./event";
+import { type Event } from "./event";
 
 type DateFilter = "all" | "today" | "week" | "month";
 type SortOption = "date" | "popular";

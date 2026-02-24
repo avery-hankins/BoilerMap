@@ -3,7 +3,7 @@ import React, {
   useContext,
   useEffect,
   useState,
-  ReactNode,
+  type ReactNode,
 } from "react";
 
 export type Theme = "light" | "dark" | "system";
