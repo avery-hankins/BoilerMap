@@ -707,10 +707,10 @@ export default function EventDetailsPage(): React.JSX.Element {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-surface-dark via-surface to-surface-dark p-6">
+    <div className="min-h-screen bg-gradient-to-br from-surface-dark via-surface to-surface-dark p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Back Button and Edit Controls */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
           <button
             onClick={() => window.history.back()}
             className="flex items-center space-x-2 px-4 py-2 bg-surface hover:bg-background-lighter text-text-secondary rounded-lg transition border border-border"
@@ -721,7 +721,7 @@ export default function EventDetailsPage(): React.JSX.Element {
 
           {/* Edit/Delete buttons for authorized users */}
           {canEditEvent && !editLoading && !isEditMode && !hasOccurred && (
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={handleEditEvent}
                 className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition font-medium"
@@ -742,7 +742,7 @@ export default function EventDetailsPage(): React.JSX.Element {
 
           {/* Save/Cancel buttons in edit mode */}
           {isEditMode && (
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={handleSaveEvent}
                 disabled={isSaving}
@@ -826,7 +826,7 @@ export default function EventDetailsPage(): React.JSX.Element {
           </div>
 
           {/* Event Details */}
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {/* Event Occurred Notice */}
             {hasOccurred && (
               <div className="bg-blue-900 bg-opacity-30 border-l-4 border-blue-500 p-4 mb-6 rounded-lg">
@@ -969,12 +969,12 @@ export default function EventDetailsPage(): React.JSX.Element {
             {/* Action Buttons - Hide in edit mode */}
             {!isEditMode && (
               <>
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* RSVP Button */}
                   <button
                     onClick={handleRSVPClick}
                     disabled={isRsvpDisabled}
-                    className={`col-span-2 flex items-center justify-center space-x-2 px-6 py-4 rounded-lg font-semibold transition shadow-lg transform hover:scale-105 disabled:opacity-50 ${
+                    className={`col-span-1 sm:col-span-2 flex items-center justify-center space-x-2 px-6 py-4 rounded-lg font-semibold transition shadow-lg transform hover:scale-105 disabled:opacity-50 ${
                       isRSVPd
                         ? "bg-green-600 hover:bg-green-500 text-white"
                         : "bg-gradient-to-r from-primary-600 to-primary-400 hover:from-primary-500 hover:to-primary-300 text-text-primary"

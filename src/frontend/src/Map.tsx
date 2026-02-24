@@ -129,7 +129,7 @@ export default function Map({
         center={position}
         zoom={zoom}
         ref={mapRef}
-        style={{ height: "80vh", width: "96vw" }}
+        style={{ height: "100%", width: "100%" }}
         whenReady={onMapReady as any}
       >
         <MapController center={userLocation} />

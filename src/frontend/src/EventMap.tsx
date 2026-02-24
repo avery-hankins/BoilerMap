@@ -226,9 +226,9 @@ export default function EventMap({
   };
 
   return (
-    <div className="flex h-full bg-transparent rounded-lg overflow-hidden">
+    <div className="flex flex-col md:flex-row h-full bg-transparent rounded-lg overflow-hidden">
       {/* Events List - Left Sidebar */}
-      <div className="w-full md:w-1/3 lg:w-96 xl:w-1/4 min-w-[320px] bg-surface-dark border-r border-border-dark flex flex-col overflow-hidden rounded-l-lg">
+      <div className="w-full md:w-1/3 lg:w-96 xl:w-1/4 max-h-[40vh] md:max-h-none bg-surface-dark border-b md:border-b-0 md:border-r border-border-dark flex flex-col overflow-hidden rounded-t-lg md:rounded-t-none md:rounded-l-lg">
         {/* Header with buttons */}
         <div className="p-4 border-b border-border-dark space-y-2">
           <button
@@ -333,7 +333,7 @@ export default function EventMap({
       {/* Map - Right Side */}
       <div
         ref={containerRef}
-        className="pl-2 flex-1 rounded-lg overflow-hidden"
+        className="md:pl-2 flex-1 min-h-[50vh] md:min-h-0 rounded-lg overflow-hidden"
       >
         <MapContainer
           center={position}

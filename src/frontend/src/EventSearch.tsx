@@ -282,7 +282,7 @@ const EventSearch: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-surface-dark via-surface to-surface-dark p-6">
+    <div className="min-h-screen bg-gradient-to-br from-surface-dark via-surface to-surface-dark p-4 sm:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header with Back Button */}
         <div className="mb-8">
@@ -311,9 +311,9 @@ const EventSearch: React.FC = () => {
               placeholder="Search by event name, club name, or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-14 pr-32 py-4 bg-surface border border-border rounded-lg text-text-primary text-lg placeholder-text-muted focus:ring-2 focus:ring-border-focus focus:border-transparent"
+              className="w-full pl-14 pr-4 sm:pr-32 py-4 bg-surface border border-border rounded-lg text-text-primary text-lg placeholder-text-muted focus:ring-2 focus:ring-border-focus focus:border-transparent"
             />
-            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex gap-2">
+            <div className="hidden sm:flex absolute right-2 top-1/2 transform -translate-y-1/2 gap-2">
               {(searchQuery ||
                 dateFilter !== "all" ||
                 sortBy !== "date" ||
@@ -337,6 +337,30 @@ const EventSearch: React.FC = () => {
                 Search
               </button>
             </div>
+          </div>
+          <div className="flex sm:hidden gap-2 mt-3">
+            {(searchQuery ||
+              dateFilter !== "all" ||
+              sortBy !== "date" ||
+              locationFilter ||
+              tagFilter ||
+              minAttendeesFilter !== "all" ||
+              maxAttendeesFilter !== "all") && (
+              <button
+                type="button"
+                onClick={handleClearFilters}
+                className="flex-1 py-2 bg-background-lighter hover:bg-surface-light text-text-primary rounded-lg transition flex items-center justify-center gap-2"
+              >
+                <X size={16} />
+                Clear
+              </button>
+            )}
+            <button
+              type="submit"
+              className="flex-1 py-2 bg-accent-dark hover:bg-accent text-text-primary rounded-lg font-semibold transition"
+            >
+              Search
+            </button>
           </div>
         </form>
 
@@ -423,7 +447,7 @@ const EventSearch: React.FC = () => {
           </div>
 
           {/* Location, Tag, and Attendee Filters */}
-          <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* Location Filter */}
             <div>
               <label className="block text-gray-400 text-sm font-medium mb-2">

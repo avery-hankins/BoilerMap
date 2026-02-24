@@ -1,6 +1,6 @@
 import { API_URL } from "./config";
 import React, { useState, useRef, useEffect } from "react";
-import { MapPin, Layers, Home, Users, Search, Calendar } from "lucide-react";
+import { MapPin, Layers, Home, Users, Search, Calendar, Menu, X as MenuClose } from "lucide-react";
 import EventMap from "./EventMap";
 import { useNavigate, Routes, Route, BrowserRouter } from "react-router-dom";
 import ClassroomBooking from "./RoomInfo";
@@ -64,6 +64,7 @@ interface Event {
 export default function BoilermapUI() {
   const { resolvedTheme } = useTheme();
   const [activeTab, setActiveTab] = useState("event-map");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [zoom, setZoom] = useState(1);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -244,24 +245,24 @@ export default function BoilermapUI() {
   return (
     <div className="min-h-screen bg-background-dark text-text-secondary">
       {/* Header */}
-      <header className="bg-background-main border-b border-border-dark px-6 py-4">
+      <header className="bg-background-main border-b border-border-dark px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <img
               id="boilermap-logo"
               src={resolvedTheme === "light" ? "/logo_light.ico" : "/logo.ico"}
               alt="BoilerMap Logo"
-              className="w-12 h-12 rounded-xl"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl"
             />
             <div>
               <h1 className="text-xl font-semibold">Boilermap</h1>
-              <p className="text-sm text-text-muted">
+              <p className="text-sm text-text-muted hidden sm:block">
                 The quickest way to find events
               </p>
             </div>
           </div>
 
-          <nav className="flex gap-8">
+          <nav className="hidden md:flex gap-8">
             <button
               onClick={() => setActiveTab("event-map")}
               className={`px-4 py-2 rounded-lg transition-colors ${
@@ -305,8 +306,19 @@ export default function BoilermapUI() {
           </nav>
 
           <div className="flex items-center gap-4">
-            {/* Theme Toggle */}
-            <ThemeToggle />
+            {/* Theme Toggle - hidden on mobile, shown in hamburger menu instead */}
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+
+            {/* Mobile hamburger button */}
+            <button
+              className="md:hidden p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-background-light transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <MenuClose className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
 
             {/* Profile Avatar */}
             <div
@@ -330,12 +342,42 @@ export default function BoilermapUI() {
             </div>
           </div>
         </div>
+
+        {/* Mobile dropdown menu */}
+        {mobileMenuOpen && (
+          <nav className="md:hidden mt-4 flex flex-col gap-2 border-t border-border-dark pt-4">
+            {[
+              { key: "event-map", label: "Event Map" },
+              { key: "map", label: "Book Room" },
+              { key: "club", label: "Club Management" },
+              { key: "recommendations", label: "Recommendations" },
+            ].map((item) => (
+              <button
+                key={item.key}
+                onClick={() => {
+                  setActiveTab(item.key);
+                  setMobileMenuOpen(false);
+                }}
+                className={`px-4 py-3 rounded-lg transition-colors text-left ${
+                  activeTab === item.key
+                    ? "bg-background-light text-text-primary"
+                    : "text-text-muted hover:text-text-primary hover:bg-background-light"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+            <div className="px-4 py-3 border-t border-border-dark mt-2 pt-4">
+              <ThemeToggle />
+            </div>
+          </nav>
+        )}
       </header>
 
       {/* Main Content */}
-      <main className="p-6">
+      <main className="p-4 sm:p-6">
         {activeTab === "map" && (
-          <div className="bg-background-main rounded-2xl p-6 border border-border-dark">
+          <div className="bg-background-main rounded-2xl p-4 sm:p-6 border border-border-dark">
             {/* Map Header */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-medium text-accent-dark">
@@ -367,7 +409,7 @@ export default function BoilermapUI() {
           </div>
         )}
         {activeTab === "event-map" && (
-          <div className="bg-surface-dark rounded-2xl p-6 border border-border-dark">
+          <div className="bg-surface-dark rounded-2xl p-4 sm:p-6 border border-border-dark">
             {/* Map Header */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-medium text-accent-dark">
