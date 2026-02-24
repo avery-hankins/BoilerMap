@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import {
   Calendar,
@@ -54,7 +55,7 @@ export default function ClassroomBooking() {
           // Fetch events from YOUR database for this specific room
           try {
             const eventsResponse = await fetch(
-              `http://localhost:3000/api/events/eventlist`,
+              `${API_URL}/api/events/eventlist`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,

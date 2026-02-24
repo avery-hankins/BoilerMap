@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -109,7 +110,7 @@ export default function EventDetailsPage(): React.JSX.Element {
 
         // Fetch all event details
         const eventResponse = await fetch(
-          `http://localhost:3000/api/events/eventlist`,
+          `${API_URL}/api/events/eventlist`,
           {
             headers: token ? { Authorization: `Bearer ${token}` } : {},
           },
@@ -153,7 +154,7 @@ export default function EventDetailsPage(): React.JSX.Element {
           try {
             setEditLoading(true);
             const editPermissionResponse = await fetch(
-              `http://localhost:3000/api/events/${eventId}/can-edit`,
+              `${API_URL}/api/events/${eventId}/can-edit`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               },
@@ -175,7 +176,7 @@ export default function EventDetailsPage(): React.JSX.Element {
         // Fetch event tags
         try {
           const tagsResponse = await fetch(
-            `http://localhost:3000/api/events/gettags`,
+            `${API_URL}/api/events/gettags`,
           );
           if (tagsResponse.ok) {
             const tagsData = await tagsResponse.json();
@@ -188,7 +189,7 @@ export default function EventDetailsPage(): React.JSX.Element {
         // Fetch event's current tags
         try {
           const eventTagsResponse = await fetch(
-            `http://localhost:3000/api/events/${eventId}/tags`,
+            `${API_URL}/api/events/${eventId}/tags`,
           );
           if (eventTagsResponse.ok) {
             const eventTagsData = await eventTagsResponse.json();
@@ -201,7 +202,7 @@ export default function EventDetailsPage(): React.JSX.Element {
         // Fetch event image
         try {
           const imageResponse = await fetch(
-            `http://localhost:3000/api/events/get-image-by-event/${eventId}`,
+            `${API_URL}/api/events/get-image-by-event/${eventId}`,
           );
 
           if (imageResponse.ok) {
@@ -218,7 +219,7 @@ export default function EventDetailsPage(): React.JSX.Element {
         if (token) {
           try {
             const rsvpStatusResponse = await fetch(
-              `http://localhost:3000/api/events/${eventId}/rsvp-status`,
+              `${API_URL}/api/events/${eventId}/rsvp-status`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               },
@@ -236,7 +237,7 @@ export default function EventDetailsPage(): React.JSX.Element {
         // Fetch attendees list
         try {
           const attendeesResponse = await fetch(
-            `http://localhost:3000/api/events/${eventId}/rsvps`,
+            `${API_URL}/api/events/${eventId}/rsvps`,
           );
 
           if (attendeesResponse.ok) {
@@ -253,7 +254,7 @@ export default function EventDetailsPage(): React.JSX.Element {
           if (token) headers["Authorization"] = `Bearer ${token}`;
 
           const likesResponse = await fetch(
-            `http://localhost:3000/api/events/${eventId}/likes`,
+            `${API_URL}/api/events/${eventId}/likes`,
             { headers },
           );
 
@@ -299,7 +300,7 @@ export default function EventDetailsPage(): React.JSX.Element {
 
     const incrementView = async () => {
       try {
-        await fetch(`http://localhost:3000/api/events/${eventId}/views`, {
+        await fetch(`${API_URL}/api/events/${eventId}/views`, {
           method: "POST",
         });
         console.log("View count updated");
@@ -355,7 +356,7 @@ export default function EventDetailsPage(): React.JSX.Element {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/events/${eventId}`,
+        `${API_URL}/api/events/${eventId}`,
         {
           method: "PUT",
           headers: {
@@ -398,7 +399,7 @@ export default function EventDetailsPage(): React.JSX.Element {
         }
         // Fetch the new image
         const imageResponse = await fetch(
-          `http://localhost:3000/api/events/get-image-by-event/${eventId}?t=${Date.now()}`,
+          `${API_URL}/api/events/get-image-by-event/${eventId}?t=${Date.now()}`,
         );
         if (imageResponse.ok) {
           const blob = await imageResponse.blob();
@@ -439,7 +440,7 @@ export default function EventDetailsPage(): React.JSX.Element {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/events/${eventId}`,
+        `${API_URL}/api/events/${eventId}`,
         {
           method: "DELETE",
           headers: {
@@ -491,7 +492,7 @@ export default function EventDetailsPage(): React.JSX.Element {
       const method = isLiked ? "DELETE" : "POST";
 
       const response = await fetch(
-        `http://localhost:3000/api/events/${eventId}/like`,
+        `${API_URL}/api/events/${eventId}/like`,
         {
           method,
           headers: {
@@ -543,7 +544,7 @@ export default function EventDetailsPage(): React.JSX.Element {
     setRsvpLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:3000/api/events/${eventId}/rsvp`,
+        `${API_URL}/api/events/${eventId}/rsvp`,
         {
           method: "POST",
           headers: {
@@ -570,7 +571,7 @@ export default function EventDetailsPage(): React.JSX.Element {
         // Refresh attendees list
         try {
           const attendeesResponse = await fetch(
-            `http://localhost:3000/api/events/${eventId}/rsvps`,
+            `${API_URL}/api/events/${eventId}/rsvps`,
           );
 
           if (attendeesResponse.ok) {
@@ -600,7 +601,7 @@ export default function EventDetailsPage(): React.JSX.Element {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/events/${eventId}/rsvp`,
+        `${API_URL}/api/events/${eventId}/rsvp`,
         {
           method: "POST",
           headers: {
@@ -622,7 +623,7 @@ export default function EventDetailsPage(): React.JSX.Element {
 
       // Refresh attendees list
       const attendeesResponse = await fetch(
-        `http://localhost:3000/api/events/${eventId}/rsvps`,
+        `${API_URL}/api/events/${eventId}/rsvps`,
       );
 
       if (attendeesResponse.ok) {
@@ -632,7 +633,7 @@ export default function EventDetailsPage(): React.JSX.Element {
 
       // Refresh event data to update count
       const eventResponse = await fetch(
-        `http://localhost:3000/api/events/eventlist`,
+        `${API_URL}/api/events/eventlist`,
       );
       if (eventResponse.ok) {
         const allEvents = await eventResponse.json();
@@ -1061,7 +1062,7 @@ export default function EventDetailsPage(): React.JSX.Element {
                 >
                   {attendee.profilePicture && !failedImages.has(attendee.id) ? (
                     <img
-                      src={`http://localhost:3000${attendee.profilePicture}`}
+                      src={`${API_URL}${attendee.profilePicture}`}
                       alt={`${attendee.firstName} ${attendee.lastName}`}
                       className="flex-shrink-0 w-12 h-12 rounded-full object-cover border-2 border-orange-400"
                       onError={() => handleImageError(attendee.id)}

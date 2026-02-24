@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect, FormEvent } from "react";
 import {
   Search,
@@ -71,7 +72,7 @@ const EventSearch: React.FC = () => {
   // Fetch buildings from API
   const fetchBuildings = async (): Promise<void> => {
     try {
-      const response = await fetch("http://localhost:3000/api/buildings");
+      const response = await fetch(`${API_URL}/api/buildings`);
       if (!response.ok) {
         throw new Error("Failed to fetch buildings");
       }
@@ -85,7 +86,7 @@ const EventSearch: React.FC = () => {
   // Fetch tags from API
   const fetchTags = async (): Promise<void> => {
     try {
-      const response = await fetch("http://localhost:3000/api/tags");
+      const response = await fetch(`${API_URL}/api/tags`);
       if (!response.ok) {
         throw new Error("Failed to fetch tags");
       }
@@ -121,7 +122,7 @@ const EventSearch: React.FC = () => {
         const results = await Promise.all(
           events.map(async (event) => {
             const res = await fetch(
-              `http://localhost:3000/api/events/${event.id}/likes`,
+              `${API_URL}/api/events/${event.id}/likes`,
               {
                 headers: token ? { Authorization: `Bearer ${token}` } : {},
               },
@@ -172,7 +173,7 @@ const EventSearch: React.FC = () => {
       }
       params.append("sortBy", sortBy);
 
-      const url = `http://localhost:3000/api/events/search?${params.toString()}`;
+      const url = `${API_URL}/api/events/search?${params.toString()}`;
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -205,7 +206,7 @@ const EventSearch: React.FC = () => {
 
     // Fetch all events
     setIsLoading(true);
-    fetch("http://localhost:3000/api/events/search?sortBy=date")
+    fetch(`${API_URL}/api/events/search?sortBy=date`)
       .then((res) => res.json())
       .then((data) => setEvents(data))
       .catch((err) => setError(err.message))

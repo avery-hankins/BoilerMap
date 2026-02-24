@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { MailX, Mail, CheckCircle, XCircle } from "lucide-react";
 
@@ -26,7 +27,7 @@ export default function EmailUnsubscribe() {
 
   const fetchClubInfo = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/clubs/${id}`);
+      const response = await fetch(`${API_URL}/api/clubs/${id}`);
       if (response.ok) {
         const data = await response.json();
         setClubName(data.name);
@@ -46,7 +47,7 @@ export default function EmailUnsubscribe() {
       const userId = getCurrentUserId();
       if (!userId) return;
 
-      const response = await fetch(`http://localhost:3000/api/clubs/${id}`);
+      const response = await fetch(`${API_URL}/api/clubs/${id}`);
       if (response.ok) {
         const data = await response.json();
         const membership = data.memberships?.find(
@@ -90,7 +91,7 @@ export default function EmailUnsubscribe() {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/email-unsubscribe",
+        `${API_URL}/api/email-unsubscribe`,
         {
           method: "POST",
           headers: {
@@ -137,7 +138,7 @@ export default function EmailUnsubscribe() {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/email-resubscribe",
+        `${API_URL}/api/email-resubscribe`,
         {
           method: "POST",
           headers: {

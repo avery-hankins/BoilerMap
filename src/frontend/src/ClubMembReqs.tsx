@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { AlertCircle, CheckCircle, XCircle, Users } from "lucide-react";
 
@@ -15,7 +16,7 @@ const ClubRequestsManager = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token"); // Adjust based on your storage key
-      const response = await fetch("http://localhost:3000/api/clubs/requests", {
+      const response = await fetch(`${API_URL}/api/clubs/requests`, {
         credentials: "include",
         headers: token
           ? {
@@ -53,7 +54,7 @@ const ClubRequestsManager = () => {
       const token = localStorage.getItem("token"); // Adjust based on your storage key
 
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${clubId}/accept`,
+        `${API_URL}/api/clubs/${clubId}/accept`,
         {
           method: "POST",
           headers: {
@@ -84,7 +85,7 @@ const ClubRequestsManager = () => {
       const token = localStorage.getItem("token"); // Adjust based on your storage key
 
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${clubId}/reject`,
+        `${API_URL}/api/clubs/${clubId}/reject`,
         {
           method: "POST",
           headers: {

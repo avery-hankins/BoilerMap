@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import { Navigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
@@ -16,7 +17,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
       try {
         // Call your backend to verify
-        const response = await fetch("http://localhost:3000/api/verify", {
+        const response = await fetch(`${API_URL}/api/verify`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

@@ -29,7 +29,7 @@ router.post("/forgot-password", async (req: Request, res: Response) => {
     });
 
     // Create reset link (frontend route)
-    const resetLink = `http://localhost:5173/reset-password?token=${token}`;
+    const resetLink = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password?token=${token}`;
 
     // Send email
     const transporter = createEmailTransporter();

@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -121,7 +122,7 @@ function UserInfo() {
       uniqueIds.map(async (id: number) => {
         try {
           const resp = await fetch(
-            `http://localhost:3000/api/clubs/convert-clubid?clubId=${id}`,
+            `${API_URL}/api/clubs/convert-clubid?clubId=${id}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             },
@@ -153,7 +154,7 @@ function UserInfo() {
       memberships.map(async (m: Membership) => {
         try {
           const resp = await fetch(
-            `http://localhost:3000/api/clubs/getauthbyclub/${m.clubId}`,
+            `${API_URL}/api/clubs/getauthbyclub/${m.clubId}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             },
@@ -183,7 +184,7 @@ function UserInfo() {
         if (!token) throw new Error("Not logged in.");
 
         const userResponse = await fetch(
-          "http://localhost:3000/api/users/userdata",
+          `${API_URL}/api/users/userdata`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -199,7 +200,7 @@ function UserInfo() {
 
         try {
           const photoResponse = await fetch(
-            "http://localhost:3000/api/users/profile-photo",
+            `${API_URL}/api/users/profile-photo`,
             {
               headers: { Authorization: `Bearer ${token}` },
             },
@@ -216,7 +217,7 @@ function UserInfo() {
         }
 
         const membershipsResponse = await fetch(
-          "http://localhost:3000/api/users/club-memberships",
+          `${API_URL}/api/users/club-memberships`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -248,7 +249,7 @@ function UserInfo() {
         if (user.id) {
           try {
             const tasksResponse = await fetch(
-              `http://localhost:3000/api/tasks/user/${user.id}`,
+              `${API_URL}/api/tasks/user/${user.id}`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               },
@@ -270,7 +271,7 @@ function UserInfo() {
         if (userId) {
           try {
             const followingResponse = await fetch(
-              `http://localhost:3000/api/users/${userId}/following`,
+              `${API_URL}/api/users/${userId}/following`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               },
@@ -316,7 +317,7 @@ function UserInfo() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3000/api/users/userdata", {
+      const response = await fetch(`${API_URL}/api/users/userdata`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -372,7 +373,7 @@ function UserInfo() {
       formDataObj.append("photo", photoFile);
 
       const response = await fetch(
-        "http://localhost:3000/api/users/upload-profile-photo",
+        `${API_URL}/api/users/upload-profile-photo`,
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },
@@ -386,7 +387,7 @@ function UserInfo() {
 
       try {
         const photoResponse = await fetch(
-          "http://localhost:3000/api/users/profile-photo",
+          `${API_URL}/api/users/profile-photo`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -420,7 +421,7 @@ function UserInfo() {
       setRemovingClub(clubId);
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "http://localhost:3000/api/users/club-memberships",
+        `${API_URL}/api/users/club-memberships`,
         {
           method: "PUT",
           headers: {
@@ -461,7 +462,7 @@ function UserInfo() {
       setUnfollowingClub(clubId);
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${clubId}/follow`,
+        `${API_URL}/api/clubs/${clubId}/follow`,
         {
           method: "DELETE",
           headers: {
@@ -506,7 +507,7 @@ function UserInfo() {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/tasks/${taskId}/user/${userData.id}`,
+        `${API_URL}/api/tasks/${taskId}/user/${userData.id}`,
         {
           method: "DELETE",
           headers: {
@@ -545,7 +546,7 @@ function UserInfo() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:3000/api/calendar/generate-token",
+        `${API_URL}/api/calendar/generate-token`,
         {
           method: "POST",
           headers: {
@@ -585,7 +586,7 @@ function UserInfo() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/calendar/download?token=${calendarToken}`,
+        `${API_URL}/api/calendar/download?token=${calendarToken}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

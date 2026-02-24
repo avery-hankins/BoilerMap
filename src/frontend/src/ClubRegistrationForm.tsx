@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -42,7 +43,7 @@ export default function ClubRegistrationForm() {
       }
 
       const response = await fetch(
-        "http://localhost:3000/api/club-registrations",
+        `${API_URL}/api/club-registrations`,
         {
           method: "POST",
           headers: {

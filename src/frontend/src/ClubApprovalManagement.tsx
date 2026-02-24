@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import {
   Building2,
@@ -46,7 +47,7 @@ export default function ClubApprovalManagement({
         }
 
         const response = await fetch(
-          "http://localhost:3000/api/club-registrations",
+          `${API_URL}/api/club-registrations`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -84,7 +85,7 @@ export default function ClubApprovalManagement({
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `http://localhost:3000/api/club-registrations/${id}/approve`,
+          `${API_URL}/api/club-registrations/${id}/approve`,
           {
             method: "PUT",
             headers: {
@@ -128,7 +129,7 @@ export default function ClubApprovalManagement({
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `http://localhost:3000/api/club-registrations/${id}/deny`,
+          `${API_URL}/api/club-registrations/${id}/deny`,
           {
             method: "PUT",
             headers: {

@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useRef, useEffect, useState } from "react";
 import {
   MapContainer,
@@ -139,7 +140,7 @@ export default function EventMap({
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          "http://localhost:3000/api/events/eventlist",
+          `${API_URL}/api/events/eventlist`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

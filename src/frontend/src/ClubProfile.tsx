@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -121,7 +122,7 @@ export default function ClubProfile() {
   const fetchClubData = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`http://localhost:3000/api/clubs/${id}`);
+      const response = await fetch(`${API_URL}/api/clubs/${id}`);
 
       if (!response.ok) {
         throw new Error("Club not found");
@@ -153,7 +154,7 @@ export default function ClubProfile() {
 
       // Check if user is a member
       const memberResponse = await fetch(
-        `http://localhost:3000/api/clubs/${id}`,
+        `${API_URL}/api/clubs/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -189,7 +190,7 @@ export default function ClubProfile() {
       // This assumes you have an endpoint to check if user has a pending request
       // If not, you can skip this check and just show the button
       // The backend will return an error if they already have a request
-      const response = await fetch(`http://localhost:3000/api/clubs/requests`, {
+      const response = await fetch(`${API_URL}/api/clubs/requests`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -218,7 +219,7 @@ export default function ClubProfile() {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${id}/request`,
+        `${API_URL}/api/clubs/${id}/request`,
         {
           method: "POST",
           headers: {
@@ -248,7 +249,7 @@ export default function ClubProfile() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${id}/can-edit`,
+        `${API_URL}/api/clubs/${id}/can-edit`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -273,7 +274,7 @@ export default function ClubProfile() {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${id}/follow-status`,
+        `${API_URL}/api/clubs/${id}/follow-status`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -302,7 +303,7 @@ export default function ClubProfile() {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${id}/followers`,
+        `${API_URL}/api/clubs/${id}/followers`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -331,7 +332,7 @@ export default function ClubProfile() {
         return;
       }
 
-      const url = `http://localhost:3000/api/clubs/${id}/follow`;
+      const url = `${API_URL}/api/clubs/${id}/follow`;
       const method = isFollowing ? "DELETE" : "POST";
 
       const response = await fetch(url, {
@@ -365,7 +366,7 @@ export default function ClubProfile() {
   const fetchUserRoles = async (userId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/users/${userId}/roles`,
+        `${API_URL}/api/users/${userId}/roles`,
       );
       if (response.ok) {
         const roles: ClubProfileUserRole[] = await response.json();
@@ -386,7 +387,7 @@ export default function ClubProfile() {
   const handleSaveChanges = async () => {
     try {
       setIsSaving(true);
-      const response = await fetch(`http://localhost:3000/api/clubs/${id}`, {
+      const response = await fetch(`${API_URL}/api/clubs/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editForm),
@@ -410,7 +411,7 @@ export default function ClubProfile() {
   const handleAssignRole = async (userId: string, newRole: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${id}/members/${userId}/role`,
+        `${API_URL}/api/clubs/${id}/members/${userId}/role`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -443,7 +444,7 @@ export default function ClubProfile() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${id}/members/${userId}`,
+        `${API_URL}/api/clubs/${id}/members/${userId}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -546,7 +547,7 @@ export default function ClubProfile() {
         // const formData = new FormData();
         // formData.append('profilePicture', file);
         //
-        // const response = await fetch(`http://localhost:3000/api/clubs/${id}/profile-picture`, {
+        // const response = await fetch(`${API_URL}/api/clubs/${id}/profile-picture`, {
         //   method: 'POST',
         //   headers: {
         //     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -595,7 +596,7 @@ export default function ClubProfile() {
       setIsUploadingPicture(true);
 
       // TODO: Replace with actual API endpoint when backend is implemented
-      // const response = await fetch(`http://localhost:3000/api/clubs/${id}/profile-picture`, {
+      // const response = await fetch(`${API_URL}/api/clubs/${id}/profile-picture`, {
       //   method: 'DELETE',
       //   headers: {
       //     Authorization: `Bearer ${localStorage.getItem('token')}`,

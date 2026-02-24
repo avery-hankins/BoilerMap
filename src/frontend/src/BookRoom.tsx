@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -67,7 +68,7 @@ export default function RoomBookingForm() {
   useEffect(() => {
     async function load() {
       try {
-        const response = await fetch("http://localhost:3000/api/clubs");
+        const response = await fetch(`${API_URL}/api/clubs`);
         const data = await response.json();
         setClubData(data);
       } catch (error) {
@@ -146,7 +147,7 @@ export default function RoomBookingForm() {
     formData.userId = user.id;
 
     // submit API request
-    fetch("http://localhost:3000/api/room-booking-requests", {
+    fetch(`${API_URL}/api/room-booking-requests`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

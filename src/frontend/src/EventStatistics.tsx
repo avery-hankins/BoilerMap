@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -55,7 +56,7 @@ export default function EventStatistics() {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:3000/api/clubs/${clubId}`,
+        `${API_URL}/api/clubs/${clubId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -76,7 +77,7 @@ export default function EventStatistics() {
 
       // Fetch all events for the club
       const eventsResponse = await fetch(
-        `http://localhost:3000/api/clubs/${clubId}/events`,
+        `${API_URL}/api/clubs/${clubId}/events`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -94,7 +95,7 @@ export default function EventStatistics() {
           try {
             // Fetch likes
             const likesResponse = await fetch(
-              `http://localhost:3000/api/events/${event.id}/likes`,
+              `${API_URL}/api/events/${event.id}/likes`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               },
@@ -105,7 +106,7 @@ export default function EventStatistics() {
 
             // Fetch RSVPs
             const rsvpsResponse = await fetch(
-              `http://localhost:3000/api/events/${event.id}/rsvps`,
+              `${API_URL}/api/events/${event.id}/rsvps`,
             );
             const rsvpsData = rsvpsResponse.ok
               ? await rsvpsResponse.json()
@@ -126,7 +127,7 @@ export default function EventStatistics() {
 
             // Fetch views
             const viewsResponse = await fetch(
-              `http://localhost:3000/api/events/${event.id}/views`,
+              `${API_URL}/api/events/${event.id}/views`,
               {
                 headers: token ? { Authorization: `Bearer ${token}` } : {},
               },

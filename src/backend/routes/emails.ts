@@ -610,7 +610,7 @@ Visit BoilerMap to RSVP and get more information about this event!
             </table>
 
             <p style="margin-top: 20px;">
-              <a href="${process.env.FRONTEND_URL || "http://localhost:3000"}"
+              <a href="${process.env.FRONTEND_URL || "http://localhost:5173"}"
                  style="background-color: #CEB888; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
                 Visit BoilerMap to RSVP
               </a>
