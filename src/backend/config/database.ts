@@ -1,7 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../generated/prisma/client/client";
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
-// Create a single shared Prisma client instance
-// This follows Prisma's best practice of using a singleton pattern
-const prisma = new PrismaClient();
+const adapter = new PrismaMariaDb(process.env.DATABASE_URL!);
+
+const prisma = new PrismaClient({ adapter });
 
 export default prisma;

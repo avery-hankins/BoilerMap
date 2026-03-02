@@ -1,10 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "./generated/prisma/client/client";
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import "dotenv/config";
 import nodemailer from "nodemailer";
 import * as fs from "fs";
 import * as path from "path";
 
-const prisma = new PrismaClient();
+const adapter = new PrismaMariaDb(process.env.DATABASE_URL!);
+const prisma = new PrismaClient({ adapter });
 
 // Logger function that writes to both console and file
 const logFile = path.join(__dirname, "logs", "rsvp_email_job.log");
