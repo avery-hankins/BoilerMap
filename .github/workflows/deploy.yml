@@ -19,7 +19,7 @@ jobs:
             cd ${{ secrets.DEPLOY_PATH }}
             git fetch origin main
             git reset --hard origin/main
-            cd src/backend && npm install && npm run build
+            cd src/backend && npm install && npx prisma generate
             cd ../frontend && npm install && npm run build
             cd ../..
             sudo systemctl restart boilermap
