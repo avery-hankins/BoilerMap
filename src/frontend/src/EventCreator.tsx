@@ -13,24 +13,61 @@ import {
   Mail,
 } from "lucide-react";
 
+interface UserData {
+  username: string;
+  id: number;
+}
+
+interface Club {
+  id: number;
+  name: string;
+  role?: string;
+}
+
+interface Booking {
+  id: number;
+  clubId: number;
+  roomId: number;
+  approvalStatus: string;
+  room?: { buildingCode: string; roomNum: string };
+  expectedAttendance?: number;
+  startTime: string;
+  endTime?: string;
+  description?: string;
+}
+
+interface EventTag {
+  id: number;
+  name: string;
+}
+
+interface EventDetails {
+  description: string;
+  isRecurring: boolean;
+  image: File | null;
+  imagePreview: string | null;
+  startTime: string;
+  endTime: string;
+}
+
 export default function CreateEventPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [user, setUser] = useState(null);
-  const [authorizedClubs, setAuthorizedClubs] = useState([]);
-  const [selectedClub, setSelectedClub] = useState(null);
-  const [bookings, setBookings] = useState([]);
-  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [user, setUser] = useState<UserData | null>(null);
+  const [authorizedClubs, setAuthorizedClubs] = useState<Club[]>([]);
+  const [selectedClub, setSelectedClub] = useState<Club | null>(null);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [showEventForm, setShowEventForm] = useState(false);
-  const [availableTags, setAvailableTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [availableTags, setAvailableTags] = useState<EventTag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [showImageToast, setShowImageToast] = useState(false);
   const [emailOption, setEmailOption] = useState("default");
   const [customEmailSubject, setCustomEmailSubject] = useState("");
   const [customEmailBody, setCustomEmailBody] = useState("");
 
-  const [eventDetails, setEventDetails] = useState({
+  const [eventDetails, setEventDetails] = useState<EventDetails>({
     description: "",
     isRecurring: false,
     image: null,
@@ -150,12 +187,12 @@ export default function CreateEventPage() {
       setAuthorizedClubs(authorized);
       setLoading(false);
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : String(err));
       setLoading(false);
     }
   };
 
-  const fetchClubBookings = async (clubId) => {
+  const fetchClubBookings = async (clubId: number) => {
     try {
       const token = getToken();
 
@@ -185,12 +222,12 @@ export default function CreateEventPage() {
       console.log("All events:", allEvents);
 
       // Create a set of bookingIds that already have events
-      const usedBookingIds = new Set(allEvents.map((event) => event.bookingId));
+      const usedBookingIds = new Set(allEvents.map((event: any) => event.bookingId));
 
       console.log("Used booking IDs:", Array.from(usedBookingIds));
 
       // Filter for this club's approved bookings that don't have events yet
-      const clubBookings = allBookings.filter((booking) => {
+      const clubBookings = allBookings.filter((booking: any) => {
         const matchesClub = booking.clubId === clubId;
         const isApproved =
           booking.approvalStatus === "PRIMARY_APPROVED" ||
@@ -216,7 +253,7 @@ export default function CreateEventPage() {
     }
   };
 
-  const handleClubSelect = (club) => {
+  const handleClubSelect = (club: Club) => {
     setSelectedClub(club);
     setSelectedBooking(null);
     setShowEventForm(false);
@@ -234,7 +271,7 @@ export default function CreateEventPage() {
     });
   };
 
-  const handleBookingSelect = (booking) => {
+  const handleBookingSelect = (booking: Booking) => {
     setSelectedBooking(booking);
     setShowEventForm(true);
     setSelectedTags([]);
@@ -243,7 +280,7 @@ export default function CreateEventPage() {
     setCustomEmailBody("");
     // Pre-fill description and times if booking has them
     // Helper function to convert UTC date to local datetime-local format
-    const toLocalDatetimeString = (dateString) => {
+    const toLocalDatetimeString = (dateString: string) => {
       const date = new Date(dateString);
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -265,7 +302,7 @@ export default function CreateEventPage() {
     });
   };
 
-  const handleTagToggle = (tagId) => {
+  const handleTagToggle = (tagId: number) => {
     setSelectedTags((prev) => {
       if (prev.includes(tagId)) {
         return prev.filter((id) => id !== tagId);
@@ -275,8 +312,8 @@ export default function CreateEventPage() {
     });
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       // Validate file type - only allow jpg and png
       const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
@@ -298,7 +335,7 @@ export default function CreateEventPage() {
         ...eventDetails,
         image: file,
         imagePreview: previewUrl,
-      });
+      } as EventDetails);
       setError("");
 
       // Show success toast
@@ -325,16 +362,16 @@ export default function CreateEventPage() {
 
       // Create FormData to handle file upload
       const formData = new FormData();
-      formData.append("clubId", selectedClub.id);
-      formData.append("roomId", selectedBooking.roomId);
-      formData.append("bookingId", selectedBooking.id);
+      formData.append("clubId", String(selectedClub!.id));
+      formData.append("roomId", String(selectedBooking!.roomId));
+      formData.append("bookingId", String(selectedBooking!.id));
       formData.append(
         "startTime",
         new Date(eventDetails.startTime).toISOString(),
       );
       formData.append("endTime", new Date(eventDetails.endTime).toISOString());
       formData.append("description", eventDetails.description);
-      formData.append("isRecurring", eventDetails.isRecurring);
+      formData.append("isRecurring", String(eventDetails.isRecurring));
 
       // Add selected tags as JSON string
       formData.append("tagIds", JSON.stringify(selectedTags));
@@ -385,13 +422,13 @@ export default function CreateEventPage() {
           console.log("Attempting to send email...");
           console.log("Email option:", emailOption);
 
-          const emailPayload = {
-            eventId: result.event.id,
-            clubId: selectedClub.id,
-            clubName: selectedClub.name,
+          const emailPayload: Record<string, any> = {
+            eventId,
+            clubId: selectedClub!.id,
+            clubName: selectedClub!.name,
             startTime: new Date(eventDetails.startTime).toISOString(),
             endTime: new Date(eventDetails.endTime).toISOString(),
-            roomLocation: `${selectedBooking.room?.buildingCode} ${selectedBooking.room?.roomNum}`,
+            roomLocation: `${selectedBooking!.room?.buildingCode} ${selectedBooking!.room?.roomNum}`,
             description: eventDetails.description,
           };
 
@@ -463,7 +500,7 @@ export default function CreateEventPage() {
           console.error("Error sending email:", emailErr);
           // Show warning but don't fail the entire operation
           setError(
-            `Event created successfully, but email failed to send: ${emailErr.message}`,
+            `Event created successfully, but email failed to send: ${emailErr instanceof Error ? emailErr.message : String(emailErr)}`,
           );
         }
       } else {
@@ -477,11 +514,11 @@ export default function CreateEventPage() {
         URL.revokeObjectURL(eventDetails.imagePreview);
       }
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString("en-US", {
       month: "short",
       day: "numeric",
@@ -921,12 +958,12 @@ export default function CreateEventPage() {
                     </h3>
                     <div className="bg-surface-light rounded-lg p-4 space-y-2 text-sm border border-border">
                       <div>
-                        <strong>Club:</strong> {selectedClub.name}
+                        <strong>Club:</strong> {selectedClub!.name}
                       </div>
                       <div>
                         <strong>Room:</strong>{" "}
-                        {selectedBooking.room?.buildingCode}{" "}
-                        {selectedBooking.room?.roomNum}
+                        {selectedBooking!.room?.buildingCode}{" "}
+                        {selectedBooking!.room?.roomNum}
                       </div>
                       <div>
                         <strong>Start Time:</strong>{" "}
@@ -946,7 +983,7 @@ export default function CreateEventPage() {
                       </div>
                       <div>
                         <strong>Expected Attendees:</strong>{" "}
-                        {selectedBooking.expectedAttendance || "N/A"}
+                        {selectedBooking!.expectedAttendance || "N/A"}
                       </div>
                       <div>
                         <strong>Image:</strong>{" "}

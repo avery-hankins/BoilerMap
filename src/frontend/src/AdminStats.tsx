@@ -6,6 +6,7 @@ interface Booking {
   startTime: string;
   endTime: string;
   purpose?: string;
+  description?: string;
   user?: { firstName: string; lastName: string };
   club?: { name: string };
   room?: { buildingCode: string; roomNum: string };

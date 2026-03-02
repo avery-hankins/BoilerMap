@@ -2,11 +2,33 @@ import { API_URL } from "./config";
 import React, { useState, useEffect } from "react";
 import { AlertCircle, CheckCircle, XCircle, Users } from "lucide-react";
 
+interface ClubRequest {
+  id: number;
+  clubId: number;
+  user: {
+    username: string;
+    firstName: string;
+    lastName: string;
+  };
+  club: {
+    name: string;
+  };
+}
+
 const ClubRequestsManager = () => {
-  const [requests, setRequests] = useState([]);
+  const [requests, setRequests] = useState<ClubRequest[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [processingRequest, setProcessingRequest] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [processingRequests, setProcessingRequests] = useState<Set<number>>(new Set());
+
+  const getAuthHeaders = (): HeadersInit => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.warn("No auth token found in localStorage");
+    }
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
 
   useEffect(() => {
     fetchRequests();
@@ -15,14 +37,9 @@ const ClubRequestsManager = () => {
   const fetchRequests = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token"); // Adjust based on your storage key
       const response = await fetch(`${API_URL}/api/clubs/requests`, {
         credentials: "include",
-        headers: token
-          ? {
-              Authorization: `Bearer ${token}`,
-            }
-          : {},
+        headers: getAuthHeaders(),
       });
 
       console.log("Response status:", response.status);
@@ -42,16 +59,15 @@ const ClubRequestsManager = () => {
       setError(null);
     } catch (err) {
       console.error("Full error:", err);
-      setError(err.message);
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAccept = async (requestId, clubId) => {
+  const handleAccept = async (requestId: number, clubId: number) => {
     try {
-      setProcessingRequest(requestId);
-      const token = localStorage.getItem("token"); // Adjust based on your storage key
+      setProcessingRequests((prev) => new Set(prev).add(requestId));
 
       const response = await fetch(
         `${API_URL}/api/clubs/${clubId}/accept`,
@@ -59,7 +75,7 @@ const ClubRequestsManager = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            ...getAuthHeaders(),
           },
           credentials: "include",
           body: JSON.stringify({ requestId }),
@@ -70,19 +86,17 @@ const ClubRequestsManager = () => {
         throw new Error("Failed to accept request");
       }
 
-      // Remove the accepted request from the list
       setRequests((prev) => prev.filter((req) => req.id !== requestId));
     } catch (err) {
-      alert(`Error accepting request: ${err.message}`);
+      setActionError(`Error accepting request: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
-      setProcessingRequest(null);
+      setProcessingRequests((prev) => { const next = new Set(prev); next.delete(requestId); return next; });
     }
   };
 
-  const handleReject = async (requestId, clubId) => {
+  const handleReject = async (requestId: number, clubId: number) => {
     try {
-      setProcessingRequest(requestId);
-      const token = localStorage.getItem("token"); // Adjust based on your storage key
+      setProcessingRequests((prev) => new Set(prev).add(requestId));
 
       const response = await fetch(
         `${API_URL}/api/clubs/${clubId}/reject`,
@@ -90,7 +104,7 @@ const ClubRequestsManager = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            ...getAuthHeaders(),
           },
           credentials: "include",
           body: JSON.stringify({ requestId }),
@@ -101,12 +115,11 @@ const ClubRequestsManager = () => {
         throw new Error("Failed to reject request");
       }
 
-      // Remove the rejected request from the list
       setRequests((prev) => prev.filter((req) => req.id !== requestId));
     } catch (err) {
-      alert(`Error rejecting request: ${err.message}`);
+      setActionError(`Error rejecting request: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
-      setProcessingRequest(null);
+      setProcessingRequests((prev) => { const next = new Set(prev); next.delete(requestId); return next; });
     }
   };
 
@@ -164,6 +177,20 @@ const ClubRequestsManager = () => {
           </div>
 
           <div className="p-6">
+            {actionError && (
+              <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <AlertCircle className="text-red-600 flex-shrink-0" size={20} />
+                  <p className="text-red-700 text-sm">{actionError}</p>
+                </div>
+                <button
+                  onClick={() => setActionError(null)}
+                  className="text-red-400 hover:text-red-600 ml-4"
+                >
+                  <XCircle size={18} />
+                </button>
+              </div>
+            )}
             {requests.length === 0 ? (
               <div className="text-center py-12">
                 <Users className="mx-auto text-gray-300 mb-4" size={48} />
@@ -213,7 +240,7 @@ const ClubRequestsManager = () => {
                           onClick={() =>
                             handleAccept(request.id, request.clubId)
                           }
-                          disabled={processingRequest === request.id}
+                          disabled={processingRequests.has(request.id)}
                           className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <CheckCircle size={18} />
@@ -223,7 +250,7 @@ const ClubRequestsManager = () => {
                           onClick={() =>
                             handleReject(request.id, request.clubId)
                           }
-                          disabled={processingRequest === request.id}
+                          disabled={processingRequests.has(request.id)}
                           className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <XCircle size={18} />

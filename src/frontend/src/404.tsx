@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, type ChangeEvent } from "react";
 import { Home, Mail, AlertCircle, ArrowLeft, Send } from "lucide-react";
 
 interface EmailData {
