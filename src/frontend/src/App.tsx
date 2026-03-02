@@ -10,6 +10,7 @@ import EventDetailsPage from "./EventDetails";
 import CreateEventPage from "./EventCreator";
 import EventStatistics from "./EventStatistics";
 import AdminDashboard from "./AdminDashboard";
+import Error404Page from "./404";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -32,6 +33,7 @@ function App() {
       <Route path="/events/search" element={<EventSearch />} />
       <Route path="/event/:eventId" element={<EventDetailsPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="*" element={<Error404Page />} />
     </Routes>
   );
 }
