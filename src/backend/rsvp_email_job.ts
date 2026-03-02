@@ -5,7 +5,7 @@ import nodemailer from "nodemailer";
 import * as fs from "fs";
 import * as path from "path";
 
-const adapter = new PrismaMariaDb(process.env.DATABASE_URL!);
+const adapter = new PrismaMariaDb(process.env.DATABASE_URL! + "?allowPublicKeyRetrieval=true");
 const prisma = new PrismaClient({ adapter });
 
 // Logger function that writes to both console and file
