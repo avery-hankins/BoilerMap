@@ -20,7 +20,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "express": "^5.1.0",
     "leaflet": "^1.9.4",
-    "lucide-react": "^0.576.0",
+    "lucide-react": "^0.577.0",
     "react": "^19.2.0",
     "react-big-calendar": "^1.19.4",
     "react-dom": "^19.2.0",
